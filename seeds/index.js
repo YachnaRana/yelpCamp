@@ -25,18 +25,14 @@ const seedDB = async()=>{
         //make new campground on page, console.log that campground and get img array. print that here
             images:[
                 {
-                  url: 'https://res.cloudinary.com/dko5rofd4/image/upload/v1610503421/YelpCamp/l7prgt0xksquq47esdnb.jpg',
-                  filename: 'YelpCamp/l7prgt0xksquq47esdnb'
+                  url: 'https://res.cloudinary.com/dko5rofd4/image/upload/v1610569459/YelpCamp/iyim5ptunmn1fhnrypis.jpg',
+                  filename: 'YelpCamp/iyim5ptunmn1fhnrypis'
                 },
                 {
-                  url: 'https://res.cloudinary.com/dko5rofd4/image/upload/v1610503421/YelpCamp/oeyferurxho9i58rcqq1.jpg',
-                  filename: 'YelpCamp/oeyferurxho9i58rcqq1'
-                },
-                {
-                  url: 'https://res.cloudinary.com/dko5rofd4/image/upload/v1610503421/YelpCamp/lws4zlhaitsu9wegolv4.jpg',
-                  filename: 'YelpCamp/lws4zlhaitsu9wegolv4'
+                  url: 'https://res.cloudinary.com/dko5rofd4/image/upload/v1610569459/YelpCamp/psglgjjpvdqpsk9fhouq.jpg',
+                  filename: 'YelpCamp/psglgjjpvdqpsk9fhouq'
                 }
-            ]   
+              ]  
         })
         await camp.save();
     }

@@ -26,11 +26,6 @@
                         Looks good!
                     </div>
                 </div> -->
-<!--instead we will change input type to file-->
-                <div class="mb-3">
-                    <input type="file" name="image" multiple>
-                </div>
-
                 <div class="mb-3">
                     <label class="form-label" for="price">Price</label>
                     <div class="input-group">
@@ -46,6 +41,13 @@
                 <div class="mb-3">
                     <label class="form-label" for="description">Description</label>
                     <textarea class="form-control" type="text" name="campground[description]" id="description" required></textarea>
+                    <div class="valid-feedback">
+                        Looks good!
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label for="image" class="form-label">Select Images</label>
+                    <input class="form-control" type="file" id="image" name="image" multiple>
                     <div class="valid-feedback">
                         Looks good!
                     </div>
