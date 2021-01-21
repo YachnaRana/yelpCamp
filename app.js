@@ -32,8 +32,8 @@ const mongoSanitize = require('express-mongo-sanitize');
 const MongoDBStore = require('connect-mongo')(session);
 
 // connecting mongo using mongoose
-// const dbUrl = process.env.DB_URL;
-mongoose.connect('mongodb://localhost:27017/yelp-camp', {useNewUrlParser: true,useCreateIndex:true, useUnifiedTopology: true,useFindAndModify: false});
+const dbUrl = process.env.DB_URL || 'mongodb://localhost:27017/yelp-camp';
+mongoose.connect(dbUrl, {useNewUrlParser: true,useCreateIndex:true, useUnifiedTopology: true,useFindAndModify: false});
 
 const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
@@ -54,11 +54,11 @@ app.use(mongoSanitize());
 
 
 //session cookie
-
+const secret = process.env.SECRET || 'thisshouldbeabettersecret';
 //this should use mongo to save session...mongo will create new collection for session
 const store = new MongoDBStore({
-    url: 'mongodb://localhost:27017/yelp-camp',
-    secret:'thisshouldbeabettersecret',
+    url: dbUrl,
+    secret,
     touchAfter: 24 * 60 * 60    //by setting this, we are saying to the session to be updated only one time in a period of 24 hours
     
 })
@@ -68,7 +68,7 @@ store.on('error', function(e){
 app.use(session({
     store,
     name:'session',
-    secret:'thisshouldbeabettersecret',
+    secret,
     resave:false,
     saveUninitialized:true,
     cookie:{
