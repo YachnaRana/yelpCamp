@@ -2,6 +2,8 @@
 if(process.env.NODE_ENV !== 'production'){
     require('dotenv').config();
 }
+
+
 // console.log(process.env);
 const express = require('express');
 const path = require('path');
@@ -26,7 +28,11 @@ const reviewRoutes = require('./routes/reviews');
 const userRoutes = require('./routes/users')
 //to avoid mongoDB injection
 const mongoSanitize = require('express-mongo-sanitize');
+
+const MongoDBStore = require('connect-mongo')(session);
+
 // connecting mongo using mongoose
+// const dbUrl = process.env.DB_URL;
 mongoose.connect('mongodb://localhost:27017/yelp-camp', {useNewUrlParser: true,useCreateIndex:true, useUnifiedTopology: true,useFindAndModify: false});
 
 const db = mongoose.connection;
@@ -45,9 +51,22 @@ app.use(methodOverride('_method'))
 app.use(express.static(path.join(__dirname, 'public')))
 //to avoid mongoDB injection
 app.use(mongoSanitize());
+
+
 //session cookie
 
+//this should use mongo to save session...mongo will create new collection for session
+const store = new MongoDBStore({
+    url: 'mongodb://localhost:27017/yelp-camp',
+    secret:'thisshouldbeabettersecret',
+    touchAfter: 24 * 60 * 60    //by setting this, we are saying to the session to be updated only one time in a period of 24 hours
+    
+})
+store.on('error', function(e){
+    console.log('SESSION STORE ERROR', e)
+})
 app.use(session({
+    store,
     name:'session',
     secret:'thisshouldbeabettersecret',
     resave:false,
