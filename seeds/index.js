@@ -13,7 +13,7 @@ db.once('open', () =>{
 const sample = arr=> arr[Math.floor(Math.random() * arr.length)];
 const seedDB = async()=>{
     await Campground.deleteMany({});
-    for(let i=0; i<50; i++){
+    for(let i=0; i<400; i++){
         const price = Math.floor(Math.random() * 20) + 10;
         const random100 = Math.floor(Math.random() * 100);
         const camp = new Campground({
@@ -22,6 +22,10 @@ const seedDB = async()=>{
             title: `${sample(descriptors)} ${sample(places)}`,
             description: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Porro et suscipit quia, quaerat at debitis quos nihil tempore repudiandae similique enim, consectetur, numquam omnis. Vero ullam maiores totam excepturi dolor?',
             price,
+            geometry:{
+                type:"Point",
+                coordinates:[ cities[random100].longitude, cities[random100].latitude ]
+            },
         //make new campground on page, console.log that campground and get img array. print that here
             images:[
                 {
@@ -41,6 +45,8 @@ const seedDB = async()=>{
 seedDB().then(()=>{
     mongoose.connection.close();
 });
+
+
 
  
 

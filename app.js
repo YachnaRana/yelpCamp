@@ -15,6 +15,7 @@ const ExpressError = require('./utils/ExpressError');
 const mongoose = require('mongoose');
 const passport  = require('passport');
 const localStrategy = require('passport-local');
+const helmet = require('helmet');
 
 const Campground = require('./models/campground');
 const Review = require('./models/review');
@@ -23,7 +24,8 @@ const User = require('./models/user');
 const campgroundRoutes = require('./routes/campgrounds');
 const reviewRoutes = require('./routes/reviews');
 const userRoutes = require('./routes/users')
-
+//to avoid mongoDB injection
+const mongoSanitize = require('express-mongo-sanitize');
 // connecting mongo using mongoose
 mongoose.connect('mongodb://localhost:27017/yelp-camp', {useNewUrlParser: true,useCreateIndex:true, useUnifiedTopology: true,useFindAndModify: false});
 
@@ -41,15 +43,18 @@ app.set('views', path.join(__dirname, 'views'))
 app.use(express.urlencoded({extended:true}))
 app.use(methodOverride('_method'))
 app.use(express.static(path.join(__dirname, 'public')))
-
+//to avoid mongoDB injection
+app.use(mongoSanitize());
 //session cookie
 
 app.use(session({
+    name:'session',
     secret:'thisshouldbeabettersecret',
     resave:false,
     saveUninitialized:true,
     cookie:{
         httpOnly:true,
+        // secure:true,
         expires:Date.now() + 1000 *60*60*24*7,
         maxAge:1000 *60*60*24*7
     }
@@ -70,9 +75,8 @@ passport.deserializeUser(User.deserializeUser());
 
 //flashing a message
 app.use(flash());
-
+app.use(helmet({contentSecurityPolicy:false}))
 app.use((req, res, next)=>{
-    console.log(req.session)
     res.locals.currentUser = req.user;
     res.locals.success = req.flash('success');
     res.locals.error = req.flash('error');
