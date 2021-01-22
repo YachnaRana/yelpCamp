@@ -65,19 +65,21 @@ const store = new MongoDBStore({
 store.on('error', function(e){
     console.log('SESSION STORE ERROR', e)
 })
-app.use(session({
+const sessionConfig = {
     store,
-    name:'session',
+    name: 'session',
     secret,
-    resave:false,
-    saveUninitialized:true,
-    cookie:{
-        httpOnly:true,
-        // secure:true,
-        expires:Date.now() + 1000 *60*60*24*7,
-        maxAge:1000 *60*60*24*7
+    resave: false,
+    saveUninitialized: true,
+    cookie: {
+        httpOnly: true,
+        // secure: true,
+        expires: Date.now() + 1000 * 60 * 60 * 24 * 7,
+        maxAge: 1000 * 60 * 60 * 24 * 7
     }
-}))
+}
+
+app.use(session(sessionConfig));
 
 //passport setup
 app.use(passport.initialize());
